@@ -1,0 +1,9 @@
+symbols = ["BTC-USD", "ETH-USD"]
+start = "2023-01-01T00:00:00Z"
+end = "2026-10-01T00:00:00Z"
+horizon = 1
+windows = [6, 24, 72]
+train_fraction = 0.8
+validation_fraction = 0.1
+ridge_alpha = 10.0
+seed = 42

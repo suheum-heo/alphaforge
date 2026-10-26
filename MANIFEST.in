@@ -1,0 +1,4 @@
+include config/*.toml
+include requirements-lock.txt
+include VERIFICATION.md
+recursive-include scripts *.py
