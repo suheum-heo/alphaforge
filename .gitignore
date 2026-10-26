@@ -13,3 +13,6 @@ runs/
 .env
 .env.*
 !.env.example
+
+# Generated and deployed by hourly workflow; never source-controlled.
+docs/latest-forecasts.json

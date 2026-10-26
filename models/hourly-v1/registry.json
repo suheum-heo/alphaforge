@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "version": "study-001-transformer-v1",
+  "validation_through": "2026-06-30T23:00:00+00:00",
+  "selection": "Frozen extended-study validation-selected Transformer; no holdout retuning",
+  "models": [
+    {
+      "symbol": "BTC-USD",
+      "path": "BTC-USD",
+      "version": "btc-usd-transformer-v1",
+      "metadata_sha256": "f4ec5fdd553eb1b21937d39b560cf4d862cbc467b9d6b75f85ad078a79393148"
+    },
+    {
+      "symbol": "ETH-USD",
+      "path": "ETH-USD",
+      "version": "eth-usd-transformer-v1",
+      "metadata_sha256": "0cb370898d8fae22c35dae1b280351146d42161bd822ace40758cfe9fcad7f67"
+    }
+  ]
+}

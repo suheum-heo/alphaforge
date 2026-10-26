@@ -65,3 +65,11 @@ API and all requested research components are implemented and tested.
 - LSTM at its validation-selected 10 bps returned 1.76%, versus -35.46% at zero threshold;
   it was not the selected portfolio. Always-long reference: 56.40%.
 - Evidence: `runs/study-001/` (local), `docs/dashboard-data.json` (public summary), and `docs/PROTOCOL.md`.
+
+## Hourly inference pipeline
+
+- 67 Python tests and 3 JavaScript freshness tests passed locally.
+- Fixed versioned BTC/ETH Transformer checkpoints, verified metadata and tensor hashes.
+- Atomic current-hour generation; missing, open, stale, or discontinuous data blocks publication.
+- Browser expiry logic tested at the exact target-time boundary; no stale forecast is labeled current.
+- Scheduled Pages artifact deployment preserves the last successful site when generation fails.

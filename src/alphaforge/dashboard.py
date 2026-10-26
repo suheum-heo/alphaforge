@@ -88,7 +88,7 @@ def export_dashboard(runs, output):
     # Roundtrip rejects NaN before touching an existing output.
     encoded = json.dumps(data, indent=2, allow_nan=False)
     output.mkdir(parents=True, exist_ok=True)
-    for name in ("index.html", "app.js", "style.css", "PROTOCOL.md"):
+    for name in ("index.html", "app.js", "style.css", "PROTOCOL.md", "hourly.mjs"):
         shutil.copyfile(WEB / name, output / name)
     (output / "dashboard-data.json").write_text(encoded + "\n")
     return {

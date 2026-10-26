@@ -8,7 +8,7 @@ and a local FastAPI prediction service.
 
 [Interactive dashboard](https://suheum-heo.github.io/alphaforge/) · [Experiment protocol](docs/PROTOCOL.md) · [Verified results](VERIFICATION.md)
 
-The dashboard is a static, public snapshot of real experiment outputs. You can explore
+The dashboard combines a public historical research snapshot with separately timestamped hourly forecasts. You can explore
 asset/model comparisons, forecast replay, cost-adjusted walk-forward equity, and a
 fresh 2026 holdout without installing Python. It places negative results alongside
 successful engineering checks; this project does not claim a profitable strategy.
@@ -28,7 +28,7 @@ alphaforge dashboard --runs runs --output docs
 ```
 
 Only selected aggregate market metrics, equity samples, and historical forecasts are
-exported. Model weights, environment files, machine paths, and full raw datasets stay local.
+exported. Environment files, machine paths, and full raw datasets stay local. Only the explicitly promoted hourly model bundles are published in the repository.
 
 ## Start here
 
@@ -238,7 +238,52 @@ selection. Further experimentation must reserve a new holdout period.
 ## CI and publication
 
 GitHub Actions runs lint, formatting, tests, and a package build on Python 3.11/3.13.
-The dashboard deploys from `main:/docs` through GitHub Pages. There are no cloud API
+The dashboard deploys through a GitHub Actions Pages workflow. There are no cloud API
 keys or live exchange credentials. Run data, models, and virtual environments are
 excluded from the repository; a fresh clone includes the public dashboard snapshot,
 source code, protocol, and reproducible commands.
+
+## Latest hourly forecasts
+
+The public dashboard now includes an automated hourly forecast section, separate from
+all frozen historical experiments. `.github/workflows/hourly.yml` runs at minute 17
+of each hour UTC, on relevant main-branch pushes, and through **Run workflow**. It
+fetches the latest closed BTC/ETH candles, loads the fixed `models/hourly-v1` Transformer
+bundles, and deploys the dashboard plus `latest-forecasts.json` as a Pages artifact.
+It does not retrain, place trades, or run a permanent server. The two small tensor
+bundles are intentionally version-controlled for reproducible public inference.
+
+The display includes the source candle close, forecast interval, generation time,
+model version, training cutoff, and validation cutoff. Predictions expire at their
+target time. The browser checks once per minute and updates the expiry state every
+15 seconds. The interval before the next scheduled update is explicitly marked
+expired; this is hourly forecasting, not a continuously live price feed.
+
+Generation is atomic: both assets must have the latest closed candle and valid
+contiguous model history. Missing/stale data or either asset's failure prevents
+publication. Failed workflows leave the prior successful site deployment in place;
+its forecasts age into the expired state. Inspect the linked workflow status for
+failures, or manually rerun the workflow after a transient provider failure. GitHub
+Actions schedules can be delayed, and public-repository schedules can be disabled
+after 60 days without repository activity. See
+[GitHub scheduling behavior](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule).
+
+Run the same generator locally from the repository root:
+
+```sh
+python -m alphaforge.hourly
+python3 -m http.server 8766 --bind 127.0.0.1 --directory docs
+```
+
+Publishing now uses GitHub Actions Pages artifacts instead of `main:/docs` branch
+builds. The source-controlled `docs/` still contains the historical snapshot and UI;
+`docs/latest-forecasts.json` is generated, ignored by Git, and retained in each
+workflow's evidence artifact for seven days. The job has read-only repository access;
+only its deployment job receives Pages/OIDC publication permissions. No exchange keys
+or repository-write token are needed. To pause automatic updates, disable **Hourly
+forecasts and Pages** in Actions. Resume by enabling it and choosing **Run workflow**.
+
+The frozen Transformer family was selected using the extended study's validation
+period. Training ended in December 2025 and validation in June 2026. There is no
+claim that these forecasts have a reliable trading edge. Updating weights requires
+an explicit new model version, provenance checks, and validation before promotion.
