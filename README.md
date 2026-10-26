@@ -287,3 +287,42 @@ The frozen Transformer family was selected using the extended study's validation
 period. Training ended in December 2025 and validation in June 2026. There is no
 claim that these forecasts have a reliable trading edge. Updating weights requires
 an explicit new model version, provenance checks, and validation before promotion.
+
+### Prospective live performance
+
+The hourly workflow now saves every first BTC/ETH forecast per hour to the
+[`forecast-history` branch](https://github.com/suheum-heo/alphaforge/tree/forecast-history).
+This permanent Git ledger replaces reliance on seven-day workflow artifacts.
+It records the prediction, generation/recording time, model checksums, and input
+close before retrieving outcomes. Reruns cannot replace that hour's prediction;
+missed forecasts are never reconstructed. Tracking starts with this feature,
+without importing historical research results as live predictions.
+
+The workflow pushes the recorded forecasts before scoring. After the target
+candle closes, it stores the first observed close and realized log return.
+Missing target candles remain flagged and are retried. Scored rows are immutable;
+later provider corrections do not rewrite the recorded outcome. Metrics are
+separated by asset and model version. RMSE and MAE compare the model with a
+zero-return forecast on exactly the same scored hours. These are forecasting
+metrics, not a trading simulation or profit claim. Predictions are generated
+around minute 17, so part of the close-to-close target hour has already elapsed.
+
+The dashboard's **Live performance** section reports scored sample counts,
+pending outcomes, missing candles, missed hourly forecast slots, and update
+health. Collect several weeks of unseen observations before drawing conclusions.
+Provider failures are saved in the ledger, highlighted in the workflow summary,
+and published with the previous valid forecast (which still expires normally).
+An infrastructure or deployment failure leaves the last site intact; after 90
+minutes its performance status reads “Updates delayed.” GitHub Actions remains
+the source for infrastructure failure details. No email or external alerts are sent.
+
+For a local run using a separate, nonproduction ledger:
+
+```bash
+python -m alphaforge.live --ledger runs/local-live/state.json --output runs/local-live/site
+```
+
+The production workflow has write permission only to persist the separate history
+branch; it does not commit generated data to `main`. Both record and score commits
+must succeed before publishing Pages. Do not reset or delete the history branch
+if you want to preserve the prospective record.

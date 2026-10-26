@@ -73,3 +73,13 @@ API and all requested research components are implemented and tested.
 - Atomic current-hour generation; missing, open, stale, or discontinuous data blocks publication.
 - Browser expiry logic tested at the exact target-time boundary; no stale forecast is labeled current.
 - Scheduled Pages artifact deployment preserves the last successful site when generation fails.
+
+## Prospective forecast tracking
+
+- 73 Python tests passed; four JavaScript tests passed.
+- Ruff lint/format checks and package build passed.
+- Added checks for immutable first predictions, expiry rejection, closed-target-only
+  scoring, matched zero baseline calculations, missing-candle retries, per-version
+  metrics, provider failure preservation, and separate record/score phases.
+- Production history starts empty on the `forecast-history` branch; no retrospective
+  results are presented as prospective observations.

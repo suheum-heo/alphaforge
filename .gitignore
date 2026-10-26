@@ -16,3 +16,6 @@ runs/
 
 # Generated and deployed by hourly workflow; never source-controlled.
 docs/latest-forecasts.json
+
+docs/live-performance.json
+/forecast-history/

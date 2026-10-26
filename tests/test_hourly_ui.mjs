@@ -5,3 +5,14 @@ const base={schema_version:1,forecast_start:'2026-10-26T05:00:00Z',expires_at:'2
 test('forecast expires exactly at target time',()=>{assert.equal(freshness(base,Date.parse('2026-10-26T05:59:59Z')),'current');assert.equal(freshness(base,Date.parse('2026-10-26T06:00:00Z')),'expired');});
 test('clock skew is explicit',()=>assert.equal(freshness(base,Date.parse('2026-10-26T04:00:00Z')),'clock-mismatch'));
 test('reject corrupt or partial feeds',()=>{assert.throws(()=>validateFeed({...base,forecasts:base.forecasts.slice(1)}));assert.throws(()=>validateFeed({...base,expires_at:'bad'}));assert.throws(()=>validateFeed({...base,forecasts:[base.forecasts[0],base.forecasts[0]]}));});
+
+import {health} from '../src/alphaforge/web/performance.mjs';
+test('performance health exposes stale updates and provider failures',()=>{
+  const now=Date.parse('2026-10-26T06:17:00Z');
+  const data={schema_version:1,metrics:[],updated_at:new Date(now).toISOString(),last_attempt:{forecast:'ok',scoring:'ok'}};
+  assert.equal(health(data,now),'Tracking hourly outcomes');
+  assert.equal(health(data,now+91*60000),'Updates delayed');
+  data.last_attempt.forecast='failed';
+  assert.equal(health(data,now),'Data update needs attention');
+  assert.throws(()=>health({},now));
+});
