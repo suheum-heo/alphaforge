@@ -56,7 +56,10 @@
       "validation_through": "2026-06-30T23:00:00+00:00",
       "generated_at": "2026-10-26T22:47:06.847995+00:00",
       "recorded_at": "2026-10-26T22:47:06.851325+00:00",
-      "status": "pending"
+      "status": "scored",
+      "target_close_usd": 79864.87,
+      "realized_log_return": -0.001252207120511566,
+      "scored_at": "2026-10-27T02:09:37.049690+00:00"
     },
     {
       "symbol": "ETH-USD",
@@ -73,7 +76,10 @@
       "validation_through": "2026-06-30T23:00:00+00:00",
       "generated_at": "2026-10-26T22:47:06.847995+00:00",
       "recorded_at": "2026-10-26T22:47:06.851325+00:00",
-      "status": "pending"
+      "status": "scored",
+      "target_close_usd": 2310.12,
+      "realized_log_return": 0.0011824556170277013,
+      "scored_at": "2026-10-27T02:09:37.049690+00:00"
     },
     {
       "symbol": "BTC-USD",
@@ -124,7 +130,7 @@
     {
       "at": "2026-10-27T02:09:32.367484+00:00",
       "forecast": "ok",
-      "scoring": "pending"
+      "scoring": "ok"
     }
   ],
   "latest_feed": {
